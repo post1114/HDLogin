@@ -1,150 +1,61 @@
-# SimpleLogin - MC 1.8.8 Spigot登录插件
+## Security features
 
-一个简单而强大的Minecraft 1.8.8 Spigot服务器登录插件，要求玩家注册或登录后才能与服务器交互。
 
-## 功能特性
+### Password encryption
+- Use the SHA-256 salted hashing algorithm
+- Each password has a unique salt value
+- The hash value is different even if the password is the same
 
-- ✅ **强制登录系统** - 玩家必须登录后才能进行任何交互
-- ✅ **安全密码存储** - 使用SHA-256加盐哈希加密存储密码
-- ✅ **登录超时保护** - 玩家在指定时间内未登录会被自动踢出
-- ✅ **失败尝试限制** - 密码错误次数过多会暂时封禁玩家
-- ✅ **管理员工具** - 管理员可以强制登录或解除封禁
-- ✅ **完全可配置** - 所有消息和设置都可以通过配置文件自定义
-- ✅ **多语言支持** - 支持颜色代码和自定义消息
 
-## 安装方法
+### Protection mechanisms
+- Non-logged in players cannot move, attack, break blocks, use items or commands
+- Only the '/login' and '/register' commands are available for players who are not logged in
+- Login timeout automatically kicks out protection
+- Failed attempt limits prevent brute force cracking
 
-1. 使用Maven编译插件：
-   ```bash
-   mvn clean package
-   ```
 
-2. 将生成的 `SimpleLogin.jar` 文件放入服务器的 `plugins` 文件夹
+## Development Information
 
-3. 重启服务器
 
-## 玩家命令
-
-### 注册账号
-```
-/register <密码>
-```
-- 新玩家首次加入服务器时需要注册
-- 密码长度必须在配置的最小和最大长度之间
-
-### 登录账号
-```
-/login <密码>
-```
-- 已注册玩家需要登录才能进行游戏
-- 密码错误超过限制会被暂时封禁
-
-### 修改密码
-```
-/changepassword <旧密码> <新密码>
-```
-- 已登录玩家可以修改自己的密码
-
-### 注销账号
-```
-/unregister
-```
-- 注销账号后会立即被踢出服务器
-- 账号数据将被永久删除
-
-## 管理员命令
-
-### 解除登录封禁
-```
-/unloginban <玩家名>
-```
-- 解除指定玩家的登录封禁
-- 需要 `simplelogin.admin` 权限
-
-### 强制登录/注册
-```
-/forcelogin <玩家名>
-```
-- 强制让指定玩家登录（如果已注册）
-- 如果玩家未注册，会自动注册并设置临时密码
-- 需要 `simplelogin.admin` 权限
-
-## 权限节点
-
-- `simplelogin.login` - 使用登录命令（默认所有玩家）
-- `simplelogin.register` - 使用注册命令（默认所有玩家）
-- `simplelogin.changepassword` - 使用更改密码命令（默认所有玩家）
-- `simplelogin.unregister` - 使用注销命令（默认所有玩家）
-- `simplelogin.unloginban` - 使用解除封禁命令（默认OP）
-- `simplelogin.forcelogin` - 使用强制登录命令（默认OP）
-- `simplelogin.admin` - 所有管理员权限（默认OP）
-
-## 配置文件
-
-插件会在首次运行时创建 `plugins/SimpleLogin/config.yml` 文件：
-
-### 主要设置
-```yaml
-settings:
-  max-password-length: 16    # 最大密码长度
-  min-password-length: 4     # 最小密码长度
-  login-timeout: 30          # 登录超时时间（秒）
-  max-failed-attempts: 5     # 最大失败尝试次数
-  ban-duration: 30           # 封禁持续时间（分钟）
-```
-
-### 消息自定义
-所有消息都支持颜色代码（使用 `&` 代替 `§`），并且可以包含变量：
-- `{player}` - 玩家名称
-- `{minutes}` - 分钟数
-- `{seconds}` - 秒数
-- `{attempts}` - 尝试次数
-- `{min}` - 最小密码长度
-- `{max}` - 最大密码长度
-
-## 安全特性
-
-### 密码加密
-- 使用SHA-256加盐哈希算法
-- 每个密码都有唯一的盐值
-- 即使密码相同，哈希值也不同
-
-### 保护机制
-- 未登录玩家无法移动、攻击、破坏方块、使用物品或命令
-- 只有 `/login` 和 `/register` 命令对未登录玩家可用
-- 登录超时自动踢出保护
-- 失败尝试限制防止暴力破解
-
-## 开发信息
-
-- **Minecraft版本**: 1.8.8
+- **Minecraft version**: 1.8.8
 - **Spigot API**: 1.8.8-R0.1-SNAPSHOT
-- **Java版本**: 8
-- **构建工具**: Maven
+- Java Version: 8
+- **Build Tools**: Maven
 
-## 故障排除
 
-### 常见问题
+## Troubleshooting
 
-1. **玩家无法移动或交互**
-   - 这是正常行为，玩家需要先登录
-   - 使用 `/login` 或 `/register` 命令
 
-2. **密码错误被封禁**
-   - 等待封禁时间结束
-   - 管理员使用 `/unloginban` 解除封禁
+### FAQs
 
-3. **插件无法加载**
-   - 检查服务器是否为Spigot 1.8.8
-   - 确认Java版本为8或以上
 
-## 技术支持
+1. **Players cannot move or interact**
+   - This is normal behavior and players need to log in first
+   - Use the '/login' or '/register' commands
 
-如有问题或建议，请检查：
-1. 服务器日志中的错误信息
-2. 配置文件是否正确
-3. 权限设置是否适当
+
+2. **Password Error Blocked**
+   - Wait for the ban to end
+   - Admins use '/unloginban' to unblock
+
+
+3. **Plugin Fails to Load**
+   - Check if the server is Spigot 1.8.8
+   - Confirm that the Java version is 8 or above
+
+
+## Technical Support
+
+
+For questions or suggestions, please check:
+1. Error messages in the server logs
+2. Whether the profile is correct
+3. Whether the permission settings are appropriate
+
 
 ---
 
-**注意**: 请定期备份玩家数据文件 (`plugins/SimpleLogin/data.yml`) 以防数据丢失。
+
+
+
+**Note**: Please back up your player data files ('plugins/SimpleLogin/data.yml') regularly in case of data loss.
